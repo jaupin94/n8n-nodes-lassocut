@@ -1,0 +1,55 @@
+{
+	"name": "n8n-nodes-lassocut",
+	"version": "0.1.0",
+	"description": "n8n node for lassocut: remove image backgrounds (remove.bg API compatible)",
+	"license": "MIT",
+	"homepage": "https://www.lassocut.com",
+	"keywords": [
+		"n8n-community-node-package",
+		"lassocut",
+		"background-removal",
+		"remove-bg",
+		"remove background",
+		"image"
+	],
+	"author": {
+		"name": "Jerome Aupin",
+		"email": "jerome@jaupin.com"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/jaupin94/n8n-nodes-lassocut.git"
+	},
+	"scripts": {
+		"build": "n8n-node build",
+		"build:watch": "tsc --watch",
+		"dev": "n8n-node dev",
+		"lint": "n8n-node lint",
+		"lint:fix": "n8n-node lint --fix",
+		"release": "n8n-node release",
+		"prepublishOnly": "n8n-node prerelease"
+	},
+	"files": [
+		"dist"
+	],
+	"n8n": {
+		"n8nNodesApiVersion": 1,
+		"strict": true,
+		"credentials": [
+			"dist/credentials/LassocutApi.credentials.js"
+		],
+		"nodes": [
+			"dist/nodes/Lassocut/Lassocut.node.js"
+		]
+	},
+	"devDependencies": {
+		"@n8n/node-cli": "^0.49.1",
+		"eslint": "9.32.0",
+		"prettier": "3.6.2",
+		"release-it": "^19.0.4",
+		"typescript": "5.9.2"
+	},
+	"peerDependencies": {
+		"n8n-workflow": "*"
+	}
+}

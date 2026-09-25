@@ -1,0 +1,21 @@
+{
+	"node": "n8n-nodes-lassocut.lassocut",
+	"nodeVersion": "1.0",
+	"codexVersion": "1.0",
+	"categories": [
+		"Marketing",
+		"Productivity"
+	],
+	"resources": {
+		"credentialDocumentation": [
+			{
+				"url": "https://www.lassocut.com/docs/"
+			}
+		],
+		"primaryDocumentation": [
+			{
+				"url": "https://www.lassocut.com/docs/"
+			}
+		]
+	}
+}

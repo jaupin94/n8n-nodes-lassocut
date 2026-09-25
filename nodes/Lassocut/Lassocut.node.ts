@@ -283,7 +283,8 @@ export class Lassocut implements INodeType {
 					url: `${API_BASE_URL}/removebg`,
 					headers: {
 						'Content-Type': multipart.contentType,
-						Accept: 'image/*, application/json',
+						// the API answers JSON (base64 image) whenever application/json is accepted; errors are JSON anyway
+						Accept: 'image/*',
 					},
 					body: multipart.body,
 					encoding: 'arraybuffer',

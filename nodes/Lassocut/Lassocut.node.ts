@@ -285,6 +285,7 @@ export class Lassocut implements INodeType {
 						'Content-Type': multipart.contentType,
 						// the API answers JSON (base64 image) whenever application/json is accepted; errors are JSON anyway
 						Accept: 'image/*',
+						'X-Lassocut-Client': 'n8n',
 					},
 					body: multipart.body,
 					encoding: 'arraybuffer',

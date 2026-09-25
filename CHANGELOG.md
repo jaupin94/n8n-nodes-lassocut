@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.2
+
+- Identifies itself to the API (X-Lassocut-Client: n8n) so usage from n8n can be counted.
+
 ## 0.1.1
 
 - Search aliases so the node shows up for "remove background", "remove bg", "background remover"...

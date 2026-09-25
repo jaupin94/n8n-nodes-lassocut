@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.1
+
+- Search aliases so the node shows up for "remove background", "remove bg", "background remover"...
+
 ## 0.1.0
 
 - Initial release.

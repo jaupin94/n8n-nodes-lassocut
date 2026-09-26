@@ -9,7 +9,7 @@ import type {
 export class LassocutApi implements ICredentialType {
 	name = 'lassocutApi';
 
-	displayName = 'Lassocut API';
+	displayName = 'LassoCut API';
 
 	icon: Icon = {
 		light: 'file:../nodes/Lassocut/lassocut.svg',
@@ -26,7 +26,7 @@ export class LassocutApi implements ICredentialType {
 			typeOptions: { password: true },
 			required: true,
 			default: '',
-			description: 'Your lassocut API key, available at https://www.lassocut.com/account/',
+			description: 'Your LassoCut API key, available at https://www.lassocut.com/account/',
 		},
 	];
 

@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.3
+
+- The node, its credentials and its messages spell the brand LassoCut.
+
 ## 0.1.2
 
 - Identifies itself to the API (X-Lassocut-Client: n8n) so usage from n8n can be counted.

@@ -40,7 +40,7 @@ interface FullResponse {
 
 export class Lassocut implements INodeType {
 	description: INodeTypeDescription = {
-		displayName: 'lassocut',
+		displayName: 'LassoCut',
 		name: 'lassocut',
 		icon: { light: 'file:lassocut.svg', dark: 'file:lassocut.dark.svg' },
 		group: ['transform'],
@@ -48,7 +48,7 @@ export class Lassocut implements INodeType {
 		subtitle: 'Remove image backgrounds (remove.bg API compatible)',
 		description: 'Remove image backgrounds (remove.bg API compatible)',
 		defaults: {
-			name: 'lassocut',
+			name: 'LassoCut',
 		},
 		inputs: [NodeConnectionTypes.Main],
 		outputs: [NodeConnectionTypes.Main],
@@ -100,7 +100,7 @@ export class Lassocut implements INodeType {
 					{
 						name: 'Image URL',
 						value: 'url',
-						description: 'Let lassocut download the image from a public URL',
+						description: 'Let LassoCut download the image from a public URL',
 					},
 				],
 				default: 'binary',
@@ -303,7 +303,7 @@ export class Lassocut implements INodeType {
 				const statusCode = response.statusCode;
 				if (statusCode < 200 || statusCode >= 300) {
 					const parsed = parseApiError(response.body);
-					let message = parsed.title ?? `lassocut API request failed with status ${statusCode}`;
+					let message = parsed.title ?? `LassoCut API request failed with status ${statusCode}`;
 					if (statusCode === 402) {
 						message = `${message}. ${BUY_CREDITS_HINT}`;
 					}

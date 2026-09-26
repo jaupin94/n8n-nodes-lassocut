@@ -1,6 +1,6 @@
 # n8n-nodes-lassocut
 
-An [n8n](https://n8n.io/) community node for [lassocut](https://www.lassocut.com): remove the background of images in your workflows. The lassocut API is compatible with the remove.bg API, so you can move a remove.bg-based workflow to lassocut by swapping the node. The options and output stay the same.
+An [n8n](https://n8n.io/) community node for [LassoCut](https://www.lassocut.com): remove the background of images in your workflows. The LassoCut API is compatible with the remove.bg API, so you can move a remove.bg-based workflow to LassoCut by swapping the node. The options and output stay the same.
 
 ## Installation
 
@@ -11,13 +11,13 @@ See the [n8n community nodes installation guide](https://docs.n8n.io/integration
 ## Credentials
 
 1. Create an account and copy your API key from https://www.lassocut.com/account/.
-2. In n8n, create a **Lassocut API** credential and paste the key.
+2. In n8n, create a **LassoCut API** credential and paste the key.
 
 The key is sent in the `X-Api-Key` header. n8n tests it against the account endpoint when you save the credential.
 
 ## Operation
 
-**Image > Remove Background**: sends an image to lassocut and returns the cut-out image.
+**Image > Remove Background**: sends an image to LassoCut and returns the cut-out image.
 
 - **Input**: choose **Binary File** (the name of the input binary field, `data` by default) or **Image URL** (a public URL).
 - **Output Binary Field**: the binary field that receives the result (`data` by default). The file is named `<original name>-removebg.<ext>`.
@@ -35,7 +35,7 @@ The node shows API errors (invalid key, insufficient credits, rate limit and so 
 
 ## Resources
 
-- [lassocut API documentation](https://www.lassocut.com/docs/)
+- [LassoCut API documentation](https://www.lassocut.com/docs/)
 - [n8n community nodes documentation](https://docs.n8n.io/integrations/#community-nodes)
 
 ## License
@@ -44,4 +44,4 @@ MIT
 
 ---
 
-remove.bg is a trademark of Canva Austria GmbH. lassocut is not affiliated with remove.bg or Canva.
+remove.bg is a trademark of Canva Austria GmbH. LassoCut is not affiliated with remove.bg or Canva.

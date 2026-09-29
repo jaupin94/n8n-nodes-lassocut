@@ -1,3 +1,5 @@
+import { randomUUID } from 'crypto';
+
 import type {
 	IDataObject,
 	IExecuteFunctions,
@@ -7,11 +9,13 @@ import type {
 	INodeTypeDescription,
 	JsonObject,
 } from 'n8n-workflow';
-import { NodeApiError, NodeConnectionTypes, NodeOperationError } from 'n8n-workflow';
+import { NodeApiError, NodeConnectionTypes, NodeOperationError, sleep } from 'n8n-workflow';
 
 import {
 	API_BASE_URL,
 	BUY_CREDITS_HINT,
+	RETRYABLE_STATUS_CODES,
+	RETRY_WAITS_MS,
 	baseNameFromUrl,
 	baseNameWithoutExtension,
 	buildMultipartBody,
@@ -286,6 +290,8 @@ export class Lassocut implements INodeType {
 						// the API answers JSON (base64 image) whenever application/json is accepted; errors are JSON anyway
 						Accept: 'image/*',
 						'X-Lassocut-Client': 'n8n',
+						// same key on every retry below: a retried request can never bill this item twice
+						'Idempotency-Key': randomUUID(),
 					},
 					body: multipart.body,
 					encoding: 'arraybuffer',
@@ -294,11 +300,20 @@ export class Lassocut implements INodeType {
 					ignoreHttpStatusErrors: true,
 				};
 
-				const response = (await this.helpers.httpRequestWithAuthentication.call(
-					this,
-					'lassocutApi',
-					requestOptions,
-				)) as FullResponse;
+				// retry the same request up to 3 attempts total when the servers are restarting
+				// (502/503/504); any other status is returned as-is and handled below
+				let response: FullResponse;
+				for (let attempt = 0; ; attempt++) {
+					response = (await this.helpers.httpRequestWithAuthentication.call(
+						this,
+						'lassocutApi',
+						requestOptions,
+					)) as FullResponse;
+					if (!RETRYABLE_STATUS_CODES.has(response.statusCode) || attempt === RETRY_WAITS_MS.length) {
+						break;
+					}
+					await sleep(RETRY_WAITS_MS[attempt]);
+				}
 
 				const statusCode = response.statusCode;
 				if (statusCode < 200 || statusCode >= 300) {

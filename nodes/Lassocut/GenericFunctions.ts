@@ -2,6 +2,12 @@ export const API_BASE_URL = 'https://api.lassocut.com/v1.0';
 
 export const BUY_CREDITS_HINT = 'Buy credits at https://www.lassocut.com/account/';
 
+/** HTTP statuses worth retrying: a cold container restarting, not a real client/account error. */
+export const RETRYABLE_STATUS_CODES = new Set([502, 503, 504]);
+
+/** Waits (ms) before attempt 2 and attempt 3 of the same request: 3 attempts total. */
+export const RETRY_WAITS_MS = [1000, 2000];
+
 export interface MultipartField {
 	name: string;
 	value: string | Buffer;

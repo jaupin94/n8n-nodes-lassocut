@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.4
+
+- Retries the same request up to 3 attempts total when the servers are restarting (502/503/504), waiting 1s then 2s, instead of failing the item outright.
+- Sends an `Idempotency-Key` with each request, reused across its retries, so a retry can never bill an item twice.
+
 ## 0.1.3
 
 - The node, its credentials and its messages spell the brand LassoCut.

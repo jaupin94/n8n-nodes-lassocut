@@ -1,6 +1,6 @@
 {
 	"name": "n8n-nodes-lassocut",
-	"version": "0.1.4",
+	"version": "0.1.5",
 	"description": "n8n node for LassoCut: remove image backgrounds (remove.bg API compatible)",
 	"license": "MIT",
 	"homepage": "https://www.lassocut.com",
@@ -8,7 +8,7 @@
 		"n8n-community-node-package",
 		"lassocut",
 		"background-removal",
-		"remove-bg",
+		"remove-background",
 		"remove background",
 		"image"
 	],

@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.5
+
+- README: example workflow, free allowance (50 previews a month, up to 10 a day) and updated n8n documentation links.
+- Keywords: `remove-background` instead of `remove-bg`.
+
 ## 0.1.4
 
 - Retries the same request up to 3 attempts total when the servers are restarting (502/503/504), waiting 1s then 2s, instead of failing the item outright.

@@ -6,7 +6,7 @@ An [n8n](https://n8n.io/) community node for [LassoCut](https://www.lassocut.com
 
 In n8n, go to **Settings > Community Nodes**, click **Install** and enter `n8n-nodes-lassocut`.
 
-See the [n8n community nodes installation guide](https://docs.n8n.io/integrations/community-nodes/installation/) for more details.
+See the [n8n community nodes installation guide](https://docs.n8n.io/integrations/community-nodes/installation-and-management/gui-installation/) for more details.
 
 ## Credentials
 
@@ -14,6 +14,8 @@ See the [n8n community nodes installation guide](https://docs.n8n.io/integration
 2. In n8n, create a **LassoCut API** credential and paste the key.
 
 The key is sent in the `X-Api-Key` header. n8n tests it against the account endpoint when you save the credential.
+
+New accounts get 50 free previews a month (up to 10 a day, `preview` size). Full-size results use credits, which you can buy on https://www.lassocut.com/pricing/.
 
 ## Operation
 
@@ -33,10 +35,22 @@ Each output item also carries these JSON fields: `credits_charged`, `width`, `he
 
 The node shows API errors (invalid key, insufficient credits, rate limit and so on) as readable messages, and it supports **Continue On Fail**.
 
+## Example workflow
+
+Remove the background of product photos stored in a folder and save the cut-outs:
+
+1. **Read/Write Files from Disk** (or Google Drive, Dropbox, an HTTP Request node...) loads the photos as binary data in the `data` field.
+2. **LassoCut > Remove Background** with **Input** set to **Binary File**, **Format** `png` and **Crop to Subject** on.
+3. **Read/Write Files from Disk** (or any upload node) writes the `data` field. Each file is named `<original name>-removebg.png`.
+
+To start from URLs instead (for example a list of product images in a spreadsheet), set **Input** to **Image URL** and map the URL column with an expression such as `{{ $json.image_url }}`.
+
+Use `size: preview` while you build and test the workflow: previews are free within the monthly allowance.
+
 ## Resources
 
 - [LassoCut API documentation](https://www.lassocut.com/docs/)
-- [n8n community nodes documentation](https://docs.n8n.io/integrations/#community-nodes)
+- [n8n community nodes documentation](https://docs.n8n.io/integrations/community-nodes/installation-and-management/)
 
 ## License
 

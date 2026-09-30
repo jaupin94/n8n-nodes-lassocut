@@ -2,6 +2,7 @@
 
 ## 0.1.5
 
+- Node category "Marketing & Content" (was "Marketing", rejected by n8n's community package scanner).
 - README: example workflow, free allowance (50 previews a month, up to 10 a day) and updated n8n documentation links.
 - Keywords: `remove-background` instead of `remove-bg`.
 

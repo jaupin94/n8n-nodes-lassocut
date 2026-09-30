@@ -1,20 +1,48 @@
-name: Scan published package
+name: n8n scan
 
-# Runs n8n's community package scanner (the check n8n applies before verifying a node)
-# against the version published on npm.
+# n8n's community package scanner is the check n8n applies before verifying a node.
+# - source: the scanner's lint rules on this commit, so a failure shows up before publishing
+# - published: the full scan (provenance + lint) of the latest version on npm
 on:
   workflow_dispatch:
+  pull_request:
   push:
     branches:
+      - main
       - n8n-verification-*
 
 jobs:
-  scan:
+  source:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+
+      - name: Lint the source with the scanner's rules
+        run: |
+          mkdir -p "$RUNNER_TEMP/scanner" && cd "$RUNNER_TEMP/scanner"
+          npm init -y > /dev/null
+          npm install --no-audit --no-fund @n8n/scan-community-package@latest > /dev/null
+          node --input-type=module -e "
+          import { analyzePackage, SOURCE_FILE_PATTERNS } from './node_modules/@n8n/scan-community-package/scanner/scanner.mjs';
+          const r = await analyzePackage(process.env.GITHUB_WORKSPACE, SOURCE_FILE_PATTERNS);
+          if (r.details) console.log(r.details);
+          console.log(r.passed ? 'Source passes the scanner rules' : 'Source fails: ' + r.message);
+          process.exit(r.passed ? 0 : 1);
+          "
+
+  published:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/setup-node@v4
         with:
           node-version: 'lts/*'
 
-      - name: Scan n8n-nodes-lassocut
-        run: npx --yes @n8n/scan-community-package n8n-nodes-lassocut
+      # The scanner exits 0 even when a check fails, so read its output.
+      - name: Scan n8n-nodes-lassocut on npm
+        run: |
+          npx --yes @n8n/scan-community-package n8n-nodes-lassocut 2>&1 | tee scan.log
+          ! grep -q "has failed" scan.log

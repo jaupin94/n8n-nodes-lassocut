@@ -49,6 +49,7 @@ Use `size: preview` while you build and test the workflow: previews are free wit
 
 ## Resources
 
+- [n8n background removal guide on lassocut.com](https://www.lassocut.com/migrate/n8n/)
 - [LassoCut API documentation](https://www.lassocut.com/docs/)
 - [n8n community nodes documentation](https://docs.n8n.io/integrations/community-nodes/installation-and-management/)
 

@@ -38,3 +38,15 @@ test('shadow without preset keeps format and bg_color, defaults applied', () => 
 		format: 'jpg', bg_color: 'white', shadow_type: 'cast', shadow_angle: '45', shadow_length: 'medium', shadow_opacity: '55',
 	});
 });
+
+test('light direction is a whole number', () => {
+	const o = obj(buildOptionFields({ preset: 'amazon', shadow: 'cast', shadowAngle: 12.6 }));
+	assert.strictEqual(o.shadow_angle, '13');
+	const { Lassocut } = require('../dist/nodes/Lassocut/Lassocut.node');
+	const options = new Lassocut().description.properties.find((p) => p.name === 'options').options;
+	const light = options.find((p) => p.name === 'shadowAngle');
+	assert.strictEqual(light.typeOptions.numberPrecision, 0);
+	for (const name of ['shadowLength', 'shadowOpacity']) {
+		assert.match(options.find((p) => p.name === name).description, /Only used with Shadow set to Cast Shadow\.$/);
+	}
+});

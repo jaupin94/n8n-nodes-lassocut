@@ -156,7 +156,7 @@ export function buildOptionFields(options: RemoveBackgroundOptions): MultipartFi
 	}
 	if (options.shadow === 'cast' && preset !== 'zalando') {
 		fields.push({ name: 'shadow_type', value: 'cast' });
-		fields.push({ name: 'shadow_angle', value: String(options.shadowAngle ?? 45) });
+		fields.push({ name: 'shadow_angle', value: String(Math.round(options.shadowAngle ?? 45)) });
 		fields.push({ name: 'shadow_length', value: options.shadowLength || 'medium' });
 		fields.push({ name: 'shadow_opacity', value: String(options.shadowOpacity ?? 55) });
 	}

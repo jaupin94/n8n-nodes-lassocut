@@ -182,7 +182,7 @@ export class Lassocut implements INodeType {
 						displayName: 'Light Direction',
 						name: 'shadowAngle',
 						type: 'number',
-						typeOptions: { minValue: -90, maxValue: 90 },
+						typeOptions: { minValue: -90, maxValue: 90, numberPrecision: 0 },
 						default: 45,
 						description: 'Direction of the light, from -90 to 90 (positive = light from the left). Only used with Shadow set to Cast Shadow.',
 					},
@@ -224,7 +224,7 @@ export class Lassocut implements INodeType {
 							{ name: 'Long', value: 'long' },
 						],
 						default: 'medium',
-						description: 'Length of the cast shadow',
+						description: 'Length of the cast shadow. Only used with Shadow set to Cast Shadow.',
 					},
 					{
 						displayName: 'Shadow Strength',
@@ -232,7 +232,7 @@ export class Lassocut implements INodeType {
 						type: 'number',
 						typeOptions: { minValue: 0, maxValue: 100 },
 						default: 55,
-						description: 'Opacity of the cast shadow, from 0 to 100',
+						description: 'Opacity of the cast shadow, from 0 to 100. Only used with Shadow set to Cast Shadow.',
 					},
 					{
 						displayName: 'Size',

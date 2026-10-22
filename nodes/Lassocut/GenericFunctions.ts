@@ -114,3 +114,51 @@ export function numberOrNull(value: string | undefined): number | null {
 	const n = Number(value);
 	return Number.isFinite(n) ? n : null;
 }
+
+export interface RemoveBackgroundOptions {
+	size?: string;
+	type?: string;
+	format?: string;
+	background?: string;
+	crop?: boolean;
+	cropMargin?: string;
+	preset?: string;
+	shadow?: string;
+	shadowAngle?: number;
+	shadowLength?: string;
+	shadowOpacity?: number;
+}
+
+/**
+ * Builds the option fields of a remove-background request (everything except the image).
+ * With a preset, the preset decides format, background and crop, so those are never sent.
+ * Zalando allows no shadow.
+ */
+export function buildOptionFields(options: RemoveBackgroundOptions): MultipartField[] {
+	const fields: MultipartField[] = [];
+	const preset = options.preset && options.preset !== 'none' ? options.preset : '';
+
+	if (options.size) fields.push({ name: 'size', value: options.size });
+	if (options.type) fields.push({ name: 'type', value: options.type });
+	if (preset) {
+		fields.push({ name: 'preset', value: preset });
+	} else {
+		if (options.format) fields.push({ name: 'format', value: options.format });
+		if (options.background && options.background.trim() !== '') {
+			fields.push({ name: 'bg_color', value: options.background.trim().replace(/^#/, '') });
+		}
+		if (options.crop !== undefined) {
+			fields.push({ name: 'crop', value: options.crop ? 'true' : 'false' });
+		}
+		if (options.cropMargin && options.cropMargin.trim() !== '') {
+			fields.push({ name: 'crop_margin', value: options.cropMargin.trim() });
+		}
+	}
+	if (options.shadow === 'cast' && preset !== 'zalando') {
+		fields.push({ name: 'shadow_type', value: 'cast' });
+		fields.push({ name: 'shadow_angle', value: String(options.shadowAngle ?? 45) });
+		fields.push({ name: 'shadow_length', value: options.shadowLength || 'medium' });
+		fields.push({ name: 'shadow_opacity', value: String(options.shadowOpacity ?? 55) });
+	}
+	return fields;
+}

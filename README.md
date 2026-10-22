@@ -30,8 +30,10 @@ New accounts get 50 free previews a month (up to 10 a day, `preview` size). Full
   - **Background Colour**: hex code (`ffffff`) or colour name (`white`). Leave it empty for a transparent background.
   - **Crop to Subject**: removes the empty space around the subject
   - **Crop Margin**: for example `10%` or `30px`
+  - **Preset**: apply marketplace image rules (Amazon, eBay, Etsy, Shopify, Zalando, Instagram). Format, Background Colour and Crop options are ignored and the result is a JPG. Compliant means compliant with the image rules LassoCut checks.
+  - **Shadow**: `Cast Shadow` adds a shadow under the subject (not with the Zalando preset), with **Light Direction** (-90 to 90, positive = light from the left), **Shadow Length** (short, medium, long) and **Shadow Strength** (0 to 100, default 55)
 
-Each output item also carries these JSON fields: `credits_charged`, `width`, `height` and `detected_type`.
+Each output item also carries these JSON fields: `credits_charged`, `width`, `height` and `detected_type`, plus `x_preset`, `x_compliance` and `x_upscaled` when a preset is used.
 
 The node shows API errors (invalid key, insufficient credits, rate limit and so on) as readable messages, and it supports **Continue On Fail**.
 

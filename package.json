@@ -1,6 +1,6 @@
 {
 	"name": "n8n-nodes-lassocut",
-	"version": "0.1.5",
+	"version": "0.2.0",
 	"description": "n8n node for LassoCut: remove image backgrounds (remove.bg API compatible)",
 	"license": "MIT",
 	"homepage": "https://www.lassocut.com/migrate/n8n/",
@@ -25,6 +25,7 @@
 		"build:watch": "tsc --watch",
 		"dev": "n8n-node dev",
 		"lint": "n8n-node lint",
+		"test": "tsc && node --test test/*.test.js",
 		"lint:fix": "n8n-node lint --fix",
 		"release": "n8n-node release",
 		"prepublishOnly": "n8n-node prerelease"

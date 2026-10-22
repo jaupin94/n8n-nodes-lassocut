@@ -19,21 +19,13 @@ import {
 	baseNameFromUrl,
 	baseNameWithoutExtension,
 	buildMultipartBody,
+	buildOptionFields,
 	extensionFromContentType,
 	headerValue,
 	numberOrNull,
 	parseApiError,
 } from './GenericFunctions';
-import type { MultipartField } from './GenericFunctions';
-
-interface RemoveBackgroundOptions {
-	size?: string;
-	type?: string;
-	format?: string;
-	background?: string;
-	crop?: boolean;
-	cropMargin?: string;
-}
+import type { MultipartField, RemoveBackgroundOptions } from './GenericFunctions';
 
 interface FullResponse {
 	body: unknown;
@@ -187,6 +179,62 @@ export class Lassocut implements INodeType {
 						description: 'Format of the result image. JPG does not support transparency.',
 					},
 					{
+						displayName: 'Light Direction',
+						name: 'shadowAngle',
+						type: 'number',
+						typeOptions: { minValue: -90, maxValue: 90 },
+						default: 45,
+						description: 'Direction of the light, from -90 to 90 (positive = light from the left). Only used with Shadow set to Cast Shadow.',
+					},
+					{
+						displayName: 'Preset',
+						name: 'preset',
+						type: 'options',
+						options: [
+							{ name: 'Amazon', value: 'amazon' },
+							{ name: 'eBay', value: 'ebay' },
+							{ name: 'Etsy', value: 'etsy' },
+							{ name: 'Instagram', value: 'instagram' },
+							{ name: 'None', value: 'none' },
+							{ name: 'Shopify', value: 'shopify' },
+							{ name: 'Zalando', value: 'zalando' },
+						],
+						default: 'none',
+						description:
+							'Marketplace image rules applied to the result. When set, Format, Background Colour and Crop options are ignored. Amazon: Pure white background, product fills 85% of a square image, 2000 px. eBay: Square 1600 px image on white, no borders or text. Etsy: 4:3 image, at least 2000 px on the short side, product centred for the thumbnail. Shopify: Square 2048 px image, the same ratio across the store. Zalando: Portrait 1:1.44 packshot on white, JPEG sRGB, 1801 × 2600 px (no shadow). Instagram: Portrait 4:5 post, 1080 × 1350 px. Compliant means compliant with the image rules LassoCut checks.',
+					},
+					{
+						displayName: 'Shadow',
+						name: 'shadow',
+						type: 'options',
+						options: [
+							{ name: 'None', value: 'none' },
+							{ name: 'Cast Shadow', value: 'cast' },
+						],
+						default: 'none',
+						description: 'Add a cast shadow under the subject. Not available with the Zalando preset.',
+					},
+					{
+						displayName: 'Shadow Length',
+						name: 'shadowLength',
+						type: 'options',
+						options: [
+							{ name: 'Short', value: 'short' },
+							{ name: 'Medium', value: 'medium' },
+							{ name: 'Long', value: 'long' },
+						],
+						default: 'medium',
+						description: 'Length of the cast shadow',
+					},
+					{
+						displayName: 'Shadow Strength',
+						name: 'shadowOpacity',
+						type: 'number',
+						typeOptions: { minValue: 0, maxValue: 100 },
+						default: 55,
+						description: 'Opacity of the cast shadow, from 0 to 100',
+					},
+					{
 						displayName: 'Size',
 						name: 'size',
 						type: 'options',
@@ -264,18 +312,7 @@ export class Lassocut implements INodeType {
 					});
 				}
 
-				if (options.size) fields.push({ name: 'size', value: options.size });
-				if (options.type) fields.push({ name: 'type', value: options.type });
-				if (options.format) fields.push({ name: 'format', value: options.format });
-				if (options.background && options.background.trim() !== '') {
-					fields.push({ name: 'bg_color', value: options.background.trim().replace(/^#/, '') });
-				}
-				if (options.crop !== undefined) {
-					fields.push({ name: 'crop', value: options.crop ? 'true' : 'false' });
-				}
-				if (options.cropMargin && options.cropMargin.trim() !== '') {
-					fields.push({ name: 'crop_margin', value: options.cropMargin.trim() });
-				}
+				fields.push(...buildOptionFields(options));
 
 				const boundary = `----n8nLassocut${Date.now().toString(16)}${Math.random()
 					.toString(16)
@@ -340,7 +377,10 @@ export class Lassocut implements INodeType {
 					: Buffer.from(body as ArrayBuffer);
 				const contentType =
 					headerValue(response.headers, 'content-type')?.split(';')[0].trim() ?? 'image/png';
-				const extension = extensionFromContentType(contentType, options.format ?? 'png');
+				const extension = extensionFromContentType(
+					contentType,
+					options.preset && options.preset !== 'none' ? 'jpg' : (options.format ?? 'png'),
+				);
 
 				const binary = await this.helpers.prepareBinaryData(
 					resultBuffer,
@@ -354,6 +394,12 @@ export class Lassocut implements INodeType {
 					height: numberOrNull(headerValue(response.headers, 'x-height')),
 					detected_type: headerValue(response.headers, 'x-type') ?? null,
 				};
+				const xPreset = headerValue(response.headers, 'x-preset');
+				if (xPreset !== undefined) json.x_preset = xPreset;
+				const xCompliance = headerValue(response.headers, 'x-compliance');
+				if (xCompliance !== undefined) json.x_compliance = xCompliance;
+				const xUpscaled = headerValue(response.headers, 'x-upscaled');
+				if (xUpscaled !== undefined) json.x_upscaled = xUpscaled;
 
 				returnData.push({
 					json,

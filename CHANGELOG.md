@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.0
+
+- New **Preset** option: Amazon, eBay, Etsy, Shopify, Zalando and Instagram image rules applied to the result (format, background and crop options are ignored when a preset is set; the result is a JPG).
+- New **Shadow** option with **Cast Shadow**, plus **Light Direction**, **Shadow Length** and **Shadow Strength** (not available with the Zalando preset).
+- Output items carry `x_preset`, `x_compliance` and `x_upscaled` when the API returns them. Compliant means compliant with the image rules LassoCut checks.
+
 ## 0.1.5
 
 - Node category "Marketing & Content" (was "Marketing", rejected by n8n's community package scanner).
